@@ -1,1 +1,20 @@
-<p>mis-cursos works!</p>
+<div class="container">
+    <div class="header-section">
+    <h1>Lista de Estudiantes</h1>
+    <button class="btn-primary" routerLink="/gestion-academica">
+        + Nuevo Estudiante
+    </button>
+    </div>
+
+    <div class="grid-estudiantes">
+    @for (estudiante of estudiantes$ | async; track estudiante.id) {
+        <div class="card">
+        <h3>{{ estudiante.nombre }}</h3>
+        <p>Código: {{ estudiante.codigo }}</p>
+        <p>Correo: {{ estudiante.correo }}</p>
+        </div>
+    } @empty {
+        <p>No hay estudiantes registrados aún.</p>
+    }
+    </div>
+</div>
