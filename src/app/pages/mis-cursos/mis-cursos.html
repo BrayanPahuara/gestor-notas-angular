@@ -1,20 +1,109 @@
 <div class="container">
-    <div class="header-section">
-    <h1>Lista de Estudiantes</h1>
+<!-- Header -->
+<div class="header-section">
+    <div>
+        <h1>Dashboard</h1>
+        <p class="subtitle">Gestiona tus estudiantes y sus calificaciones</p>
+    </div>
     <button class="btn-primary" routerLink="/gestion-academica">
         + Nuevo Estudiante
     </button>
-    </div>
+</div>
 
+<!-- buscador -->
+<div class="search-section">
+    <input 
+        type="text" 
+        placeholder="Buscar por nombre, código o correo..." 
+        [(ngModel)]="terminoBusqueda"
+        (input)="filtrarEstudiantes()"
+        class="search-input"
+    >
+</div>
+
+<!-- loading -->
+@if (isLoading) {
+    <div class="loading-container">
+        <div class="spinner-large"></div>
+        <p>Cargando estudiantes...</p>
+    </div>
+}
+
+<!-- lista de estudiantes -->
+@if (!isLoading) {
     <div class="grid-estudiantes">
-    @for (estudiante of estudiantes$ | async; track estudiante.id) {
-        <div class="card">
-        <h3>{{ estudiante.nombre }}</h3>
-        <p>Código: {{ estudiante.codigo }}</p>
-        <p>Correo: {{ estudiante.correo }}</p>
+        @for (estudiante of estudiantesFiltrados$ | async; track estudiante.id) {
+            <div class="card">
+                <div class="card-color-header">
+                    <span class="card-icon">👨‍🎓</span>
+                    <button class="card-options" title="Opciones">⋮</button>
+                </div>
+                <!-- Contenido -->
+                <div class="card-body">
+                    <h3 [routerLink]="['/detalle-curso', estudiante.id]">
+                        {{ estudiante.nombre }}
+                    </h3>
+                    <p class="card-subtitle">{{ estudiante.codigo }}</p>
+                    <div class="card-meta">
+                        <span>🎓 {{ estudiante.grado }}</span>
+                        <span>📧 {{ estudiante.correo }}</span>
+                    </div>
+                </div>
+                <!-- Acciones -->
+                <div class="card-actions"> 
+                <button class="btn-icon btn-view"
+                    [routerLink]="['/detalle-curso', estudiante.id]"
+                    title="Ver notas">📋
+                </button>
+                <button 
+                    class="btn-icon btn-edit" 
+                    [routerLink]="['/gestion-academica', estudiante.id]"
+                    title="Editar">✏️
+                </button>
+                <button
+                    class="btn-icon btn-delete" 
+                    (click)="confirmarEliminar(estudiante)"
+                    title="Eliminar">🗑️
+                </button>
+                </div>
+            </div>
+        } @empty {
+            <div class="empty-state">
+                <span class="empty-icon">📚</span>
+                <h3>No hay estudiantes</h3>
+                <p>
+                    @if (terminoBusqueda) {
+                        No se encontraron resultados para "{{ terminoBusqueda }}"
+                    } @else {
+                        Comienza registrando tu primer estudiante
+                    }
+                </p>
+                @if (!terminoBusqueda) {
+                    <button class="btn-primary" routerLink="/gestion-academica">
+                        + Agregar Estudiante
+                    </button>
+                }
+            </div>
+        }
+    </div>
+}
+</div>
+
+<!-- Modal de confirmación -->
+@if (mostrarConfirmacion) {
+<div class="modal-overlay" (click)="cancelarEliminar()">
+    <div class="modal" (click)="$event.stopPropagation()">
+        <h3>⚠️ Confirmar eliminación</h3>
+            <p>¿Estás seguro de eliminar a <strong>{{ estudianteAEliminar?.nombre }}</strong>?</p>
+            <p class="modal-warning">Esta acción no se puede deshacer.</p>
+        <div class="modal-actions">
+        <button class="btn-secondary" (click)="cancelarEliminar()">
+            Cancelar
+        </button>
+        <button class="btn-danger" (click)="eliminarEstudiante()">
+            Sí, eliminar
+        </button>
         </div>
-    } @empty {
-        <p>No hay estudiantes registrados aún.</p>
-    }
     </div>
 </div>
+}

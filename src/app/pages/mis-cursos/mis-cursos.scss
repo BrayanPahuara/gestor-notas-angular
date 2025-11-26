@@ -1,13 +1,328 @@
+
+$card-colors: (#e84c8a, #8bc34a, #f5a623, #00bcd4, #9c27b0, #f44336);
+
+.container {
+    padding: 1.5rem 2rem;
+    max-width: 1200px;
+}
+
+/* --- HEADER  --- */
 .header-section {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+    h1  { 
+        display: flex;
+        align-items: center;
+        gap: 0.5rem; 
+        font-size: 1.5rem;
+        color: #2d3b45; 
+        &::before {
+            content: '📊';
+        }
+    }
+    .subtitle { 
+        margin-top: 0.25rem; 
+        color: #6c757d; 
+        font-size:  0.9rem; 
+    }
 }
 
+.btn-primary {
+    background-color: var(--primary);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    &:hover {
+        background-color: #025d91;
+    }
+}
+
+/* --- BUSCADOR --- */
+.search-section {
+    margin-bottom: 1.5rem;
+}
+
+.search-input {
+    width: 100%;
+    max-width: 350px;
+    padding: 0.6rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+
+    &:focus {
+        outline: none;
+        border-color: #0374b5;
+        box-shadow: 0 0 0 2px rgba(3, 116, 181, 0.1);
+    }
+}
+
+/* --- LOADING --- */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem;
+    color: #6c757d;
+}
+
+.spinner-large {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #e0e0e0;
+    border-top-color: #0374b5;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 1rem;
+}
+
+
+@keyframes spin {
+    to { transform: rotate(360deg); } 
+}
+
+/* --- GRID DE TARJETAS --- */
 .grid-estudiantes {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
 }
 
+.card {
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    // Colores rotativos para el header
+    @for $i from 1 through length($card-colors) {
+        &:nth-child(#{length($card-colors)}n + #{$i}) {
+            .card-color-header {
+                background-color: nth($card-colors, $i);
+            }
+        }
+    }
+}
+
+.card-color-header {
+    height: 100px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .card-icon {
+        font-size: 2.5rem;
+        opacity: 0.9;
+    }
+}
+
+
+// Botón de opciones (esquina superior derecha)
+.card-options {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    border-radius: 3px;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    color: white;
+
+    &:hover {
+        background: rgba(255,255,255,0.3);
+    }
+}
+
+.card-body {
+    padding: 1rem;
+
+    h3 {
+    font-size: 1rem;
+    color: #0374b5;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+    
+    &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+        }
+    }
+
+    .card-subtitle {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+    }
+
+    .card-meta {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: #9e9e9e;
+    
+    span {
+        display: flex;
+        align-items: center;
+        gap: 0.2rem;
+        }
+    }
+}
+
+.card-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-top: 1px solid #f0f0f0;
+    background: #fafafa;
+}
+
+.btn-icon {
+    padding: 0.4rem 0.6rem;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background-color 0.2s;
+
+    &.btn-view {
+    background-color: #e3f2fd;
+    &:hover { background-color: #bbdefb; }
+    }
+
+    &.btn-edit {
+    background-color: #fff8e1;
+    &:hover { background-color: #ffecb3; }
+    }
+
+    &.btn-delete {
+    background-color: #ffebee;
+    &:hover { background-color: #ffcdd2; }
+    }
+}
+
+// === ESTADO VACÍO ===
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 4px;
+    border: 2px dashed #ddd;
+
+    .empty-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+    }
+
+    h3 {
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+    }
+
+    p {
+    color: #9e9e9e;
+    margin-bottom: 1.5rem;
+    }
+}
+
+// === MODAL ===
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1100;
+}
+
+.modal {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 4px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+
+    h3 {
+    margin-bottom: 1rem;
+    color: #2d3b45;
+    }
+
+    p {
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+    }
+
+    .modal-warning {
+    color: #f44336;
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+    }
+}
+
+.modal-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.btn-secondary {
+    background-color: #e0e0e0;
+    color: #616161;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover { background-color: #d0d0d0; }
+}
+
+.btn-danger {
+    background-color: #f44336;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover { background-color: #d32f2f; }
+}
+
+// === RESPONSIVE ===
+@media (max-width: 768px) {
+    .container {
+    padding: 1rem;
+    }
+
+    .header-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    }
+
+    .search-input {
+    max-width: 100%;
+    }
+}

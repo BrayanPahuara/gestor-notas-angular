@@ -1,1 +1,80 @@
-<p>rendimiento works!</p>
+<div class="container">
+    <h1>Panel de Rendimiento</h1>
+
+    <div class="stats-grid">
+    <div class="stat-card">
+        <h3>Total Estudiantes</h3>
+        <p class="stat-value">{{ stats.totalEstudiantes }}</p>
+    </div>
+    <div class="stat-card">
+        <h3>Notas Registradas</h3>
+        <p class="stat-value">{{ stats.totalNotas }}</p>
+    </div>
+    <div class="stat-card highlight">
+        <h3>Promedio General</h3>
+        <p class="stat-value">{{ stats.promedioGeneral }}</p>
+    </div>
+    <div class="stat-card">
+        <h3>% Aprobados</h3>
+        <p class="stat-value">{{ stats.porcentajeAprobados }}%</p>
+    </div>
+    </div>
+
+    <div class="extremes-section">
+    @if (stats.mejorPromedio.nombre) {
+        <div class="extreme-card best">
+        <h4>🏆 Mejor Rendimiento</h4>
+        <p class="name">{{ stats.mejorPromedio.nombre }}</p>
+        <p class="score">{{ stats.mejorPromedio.promedio }}</p>
+        </div>
+    }
+    @if (stats.peorPromedio.nombre) {
+        <div class="extreme-card worst">
+        <h4>⚠️ Necesita Apoyo</h4>
+        <p class="name">{{ stats.peorPromedio.nombre }}</p>
+        <p class="score">{{ stats.peorPromedio.promedio }}</p>
+        </div>
+    }
+    </div>
+
+    <div class="table-section">
+    <h2>Todas las Evaluaciones</h2>
+    
+    <div class="filters">
+        <select [(ngModel)]="filtroMateria" (change)="aplicarFiltros()">
+        <option value="">Todas las materias</option>
+        @for (mat of materias; track mat) { <option [value]="mat">{{ mat }}</option> }
+        </select>
+        <button class="btn-secondary" (click)="limpiarFiltros()">Limpiar</button>
+    </div>
+
+    <div class="table-responsive">
+        <table class="data-table">
+        <thead>
+            <tr>
+            <th>Estudiante</th>
+            <th>Materia</th>
+            <th>Nota</th>
+            <th>Tipo</th>
+            <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (nota of notasFiltradas; track nota.id) {
+            <tr>
+                <td>{{ nota.estudianteNombre || '...' }}</td>
+                <td>{{ nota.materia }}</td>
+                <td>  
+                <span class="score-badge" [class.aprobado]="nota.calificacion >= 11" [class.desaprobado]="nota.calificacion < 11">
+                    {{ nota.calificacion }} - {{ nota.calificacion | estadoNota }}
+                </span>
+                </td>
+                <td>{{ nota.tipo }}</td>
+                <td>{{ nota.fecha | date:'shortDate' }}</td>
+            </tr>
+            }
+        </tbody>
+        </table>
+    </div>
+    </div>
+</div>

@@ -1,1 +1,83 @@
-<p>gestion-academica works!</p>
+<div class="container">
+    <div class="form-card">
+    <!-- Header con gradiente -->
+    <div class="form-header">
+        <h2>{{ isEditMode ? '✏️ Editar Estudiante' : '👨‍🎓 Nuevo Estudiante' }}</h2>
+        <p>{{ isEditMode ? 'Actualiza los datos del alumno' : 'Ingresa los datos para registrarlo' }}</p>
+    </div>
+
+    <!-- Cuerpo del formulario -->
+    <div class="form-body">
+        <form [formGroup]="estudianteForm" (ngSubmit)="onSubmit()">
+        
+        <div class="form-group">
+          <label>Nombre Completo *</label>
+            <input 
+            type="text" 
+            formControlName="nombre" 
+            placeholder="Ej: Juan Pérez García"
+            class="input-field"
+            [class.input-error]="isFieldInvalid('nombre')"
+            >
+            @if (isFieldInvalid('nombre')) {
+            <span class="error-msg">El nombre es obligatorio (mín. 3 letras)</span>
+            }
+        </div>
+
+        <div class="form-group">
+          <label>Código de Estudiante *</label>
+            <input 
+            type="text" 
+            formControlName="codigo" 
+            placeholder="Ej: 2025-0001"
+            class="input-field"
+            [class.input-error]="isFieldInvalid('codigo')"
+            >
+            @if (isFieldInvalid('codigo')) {
+            <span class="error-msg">El código es obligatorio</span>
+            }
+        </div>
+
+        <div class="form-group">
+            <label>Correo Electrónico *</label>
+            <input 
+            type="email" 
+            formControlName="correo" 
+            placeholder="alumno@ejemplo.com"
+            class="input-field"
+            [class.input-error]="isFieldInvalid('correo')"
+            >
+            @if (isFieldInvalid('correo')) {
+                <span class="error-msg">Ingresa un correo válido</span>
+            }
+        </div>
+        <div class="form-group">
+          <label>Grado / Año *</label>
+            <select 
+            formControlName="grado" 
+            class="input-field"
+            [class.input-error]="isFieldInvalid('grado')"
+            >
+            <option value="">Selecciona un grado...</option>
+            @for (grado of grados; track grado) {
+                <option [value]="grado">{{ grado }}</option>
+            }
+            </select>
+            @if (isFieldInvalid('grado')) {
+            <span class="error-msg">Selecciona un grado</span>
+            }
+        </div>
+        <div class="form-actions">
+            <a routerLink="/mis-cursos" class="btn-secondary">Cancelar</a>
+            <button type="submit" class="btn-primary" [disabled]="isLoading">
+            @if (isLoading) {
+                Guardando...
+            } @else {
+                {{ isEditMode ? 'Actualizar' : 'Guardar' }}
+            }
+            </button>
+        </div>
+        </form>
+    </div>
+    </div>
+</div>

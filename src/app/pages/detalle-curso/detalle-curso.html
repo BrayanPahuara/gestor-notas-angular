@@ -1,1 +1,152 @@
-<p>detalle-curso works!</p>
+<div class="container">
+
+@if (isLoading) {
+    <div class="loading-state">
+        <p>Cargando información del estudiante...</p>
+    </div>
+} @else if (estudiante) {
+
+    <!-- 1. CABECERA: Datos del Alumno y Promedio -->
+    <div class="student-header">
+        <div class="student-info">
+        <div class="back-link">
+            <a routerLink="/mis-cursos">← Volver a la lista</a>
+        </div>
+        <h1>{{ estudiante.nombre }}</h1>
+        <div class="badges">
+            <span class="badge-info">🆔 {{ estudiante.codigo }}</span>
+            <span class="badge-info">🎓 {{ estudiante.grado }}</span>
+            <span class="badge-info">📧 {{ estudiante.correo }}</span>
+        </div>
+    </div>
+
+        <!-- Tarjeta de Promedio -->
+        <div class="average-card" [class.aprobado]="promedio >= 11" [class.desaprobado]="promedio < 11">
+        <span class="avg-label">Promedio General</span>
+        <span class="avg-value">{{ promedio }}</span>
+        <span class="avg-status">{{ estadoPromedio }}</span>
+        </div>
+    </div>
+
+    <!-- 2. SECCIÓN DE GESTIÓN DE NOTAS -->
+    <div class="notes-section">
+    <div class="section-header">
+        <h2>Historial de Notas</h2>
+        <button class="btn-primary" (click)="toggleFormNota()">
+            {{ mostrarFormNota ? 'Cancelar' : '+ Nueva Nota' }}
+        </button>
+    </div>
+
+    <!-- FORMULARIO (Se muestra al dar click) -->
+    @if (mostrarFormNota) {
+        <div class="form-card">
+            <h3>{{ isEditingNota ? 'Editar Nota' : 'Registrar Nueva Nota' }}</h3>
+            <form [formGroup]="notaForm" (ngSubmit)="guardarNota()">
+            
+            <div class="form-grid">
+            <!-- Fila 1 -->
+            <div class="form-group">
+                <label>Materia</label>
+                <select formControlName="materia">
+                    <option value="">Selecciona...</option>
+                    @for (mat of materias; track mat) { <option [value]="mat">{{ mat }}</option> }
+                </select>
+            </div>
+
+                <div class="form-group">
+                <label>Calificación (0-20)</label>
+                <input type="number" formControlName="calificacion" min="0" max="20">
+                </div>
+
+                <!-- Fila 2 -->
+                <div class="form-group">
+                <label>Tipo Evaluación</label>
+                <select formControlName="tipo">
+                    <option value="">Selecciona...</option>
+                    @for (tipo of tiposEvaluacion; track tipo) { <option [value]="tipo">{{ tipo }}</option> }
+                </select>
+                </div>
+
+                <div class="form-group">
+                <label>Periodo</label>
+                <select formControlName="periodo">
+                    <option value="">Selecciona...</option>
+                    @for (per of periodos; track per) { <option [value]="per">{{ per }}</option> }
+                </select>
+                </div>
+
+                <div class="form-group">
+                <label>Fecha</label>
+                <input type="date" formControlName="fecha">
+                </div>
+            </div>
+
+            <div class="form-footer">
+                <button type="submit" class="btn-save" [disabled]="isSaving || notaForm.invalid">
+                {{ isSaving ? 'Guardando...' : 'Guardar Nota' }}
+                </button>
+            </div>
+            </form>
+        </div>
+    }
+
+<!-- LISTA DE NOTAS (TABLA) -->
+    @if (notas.length === 0) {
+        <div class="empty-notes">
+            <p>No hay notas registradas para este estudiante.</p>
+        </div>
+    } @else {
+        <div class="table-responsive">
+            <table class="notes-table">
+            <thead>
+                <tr>
+                <th>Materia</th>
+                <th>Evaluación</th>
+                <th>Periodo</th>
+                <th>Fecha</th>
+                <th>Nota</th>
+                <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (nota of notas; track nota.id) {
+                <tr>
+                    <td><strong>{{ nota.materia }}</strong></td>
+                    <td>{{ nota.tipo }}</td>
+                    <td>{{ nota.periodo }}</td>
+                    <td>{{ nota.fecha | date:'dd/MM/yy' }}</td>
+                    <td>
+                    <span class="score-badge" [class.aprobado]="nota.calificacion >= 11" [class.desaprobado]="nota.calificacion < 11">
+                        {{ nota.calificacion }} - {{ nota.calificacion | estadoNota }}
+                    </span>
+                    </td>
+                    <td class="actions-cell">
+                    <button class="btn-icon edit" (click)="editarNota(nota)">✏️</button>
+                    <button class="btn-icon delete" (click)="confirmarEliminar(nota)">🗑️</button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+            </table>
+        </div>
+        }
+    </div>
+
+} @else {
+    <p class="error">Estudiante no encontrado.</p>
+}
+
+<!-- MODAL CONFIRMACIÓN -->
+@if (mostrarConfirmacion) {
+    <div class="modal-overlay">
+        <div class="modal-content">
+        <h3>Eliminar Nota</h3>
+        <p>¿Estás seguro de borrar esta nota de <strong>{{ notaAEliminar?.materia }}</strong>?</p>
+        <div class="modal-actions">
+            <button class="btn-secondary" (click)="cancelarEliminar()">Cancelar</button>
+            <button class="btn-danger" (click)="eliminarNota()">Borrar</button>
+        </div>
+        </div>
+    </div>
+}
+</div>

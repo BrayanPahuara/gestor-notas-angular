@@ -1,0 +1,255 @@
+.container {
+    padding: 1.5rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    > h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gab: 0.5rem;
+        &::before {
+            content: '📊';
+        }
+    }
+}
+// === STATS GRID ===
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+    border-left: 4px solid #0ea5e9;
+
+    h3 {
+    font-size: 0.8125rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    }
+
+    .stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+    }
+
+    &.highlight {
+    border-left-color: #10b981;
+    background-color: #f0fdf4;
+    }
+}
+
+// === EXTREMOS (Mejor/Peor) ===
+.extremes-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.extreme-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+
+    h4 {
+    font-size: 0.9375rem;
+    margin-bottom: 1rem;
+    color: #111827;
+    font-weight: 600;
+    }
+
+    .name {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    }
+
+    .score {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0;
+    }
+
+    &.best {
+    border-left: 4px solid #10b981;
+    background-color: #f0fdf4;
+
+    .score {
+        color: #059669;
+    }
+    }
+
+    &.worst {
+    border-left: 4px solid #f59e0b;
+    background-color: #fffbeb;
+
+    .score {
+        color: #d97706;
+    }
+    }
+}
+
+// === TABLA SECTION ===
+.table-section {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+
+    h2 {
+    font-size: 1.125rem;
+    color: #111827;
+    margin-bottom: 1.25rem;
+    font-weight: 600;
+    }
+}
+
+// === FILTROS ===
+.filters {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+
+    select {
+    padding: 0.5625rem 0.875rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    min-width: 200px;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:focus {
+        outline: none;
+        border-color: #0ea5e9;
+        box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+    }
+    }
+}
+
+.btn-secondary {
+    background-color: #f3f4f6;
+    color: #374151;
+    padding: 0.5625rem 1.125rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.15s ease;
+
+    &:hover {
+    background-color: #e5e7eb;
+    }
+}
+
+// === TABLA ===
+.table-responsive {
+    overflow-x: auto;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+    padding: 0.875rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+    }
+
+    thead th {
+    background: #f9fafb;
+    font-weight: 600;
+    color: #6b7280;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    }
+
+    tbody {
+    td {
+        color: #374151;
+        font-size: 0.875rem;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    tr:hover {
+        background-color: #f9fafb;
+    }
+    }
+}
+
+.score-badge {
+    display: inline-block;
+    padding: 0.3125rem 0.75rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.8125rem;
+
+    &.aprobado {
+    background-color: #d1fae5;
+    color: #065f46;
+    }
+
+    &.desaprobado {
+    background-color: #fee2e2;
+    color: #991b1b;
+    }
+}
+
+// === RESPONSIVE ===
+@media (max-width: 768px) {
+    .container {
+    padding: 1rem;
+    }
+
+    .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    }
+
+    .extremes-section {
+    grid-template-columns: 1fr;
+    }
+
+    .filters {
+    flex-direction: column;
+
+    select {
+        width: 100%;
+    }
+    }
+
+    .data-table {
+    font-size: 0.8125rem;
+
+    th,
+    td {
+        padding: 0.5rem;
+    }
+    }
+}
