@@ -6,16 +6,19 @@ import { DetalleCurso } from './pages/detalle-curso/detalle-curso';
 import { GestionAcademica } from './pages/gestion-academica/gestion-academica';
 import { Rendimiento } from './pages/rendimiento/rendimiento';
 import { NoEncontrado } from './pages/no-encontrado/no-encontrado';
+import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'login', pathMatch: 'full' },
+    // Rutas públicas donde cualquiera puede entrar 
     {path: 'login', component: Login},
     {path: 'registro', component: Registro},
-    {path: 'mis-cursos', component: MisCursos},
-    {path: 'detalle-curso/:id', component: DetalleCurso},
-    {path: 'gestion-academica', component: GestionAcademica},
-    {path: 'gestion-academica/:id', component: GestionAcademica},
-    {path: 'rendimiento', component: Rendimiento},
+    // Rutas protegidas donde se requieren login
+    {path: 'mis-cursos', component: MisCursos, canActivate: [authGuard]},
+    {path: 'detalle-curso/:id', component: DetalleCurso, canActivate: [authGuard]},
+    {path: 'gestion-academica', component: GestionAcademica, canActivate: [authGuard]},
+    {path: 'gestion-academica/:id', component: GestionAcademica, canActivate: [authGuard]},
+    {path: 'rendimiento', component: Rendimiento, canActivate: [authGuard]},
     {path: 'no-encontrado', component: NoEncontrado},
     {path: '**', redirectTo: 'no-encontrado' }
 ];
