@@ -7,6 +7,7 @@ import { Notas } from '../../services/notas';
 import { Estudiante } from '../../interfaces/estudiante';
 import { Nota, MATERIAS, TipoEvaluacion, PERIODOS } from '../../interfaces/nota';
 import { EstadoNotaPipe } from '../../pipes/estado-nota-pipe';
+import { AuthService } from '../../services/auth';
 @Component({
   selector: 'app-detalle-curso',
   standalone: true,
@@ -21,6 +22,7 @@ export class DetalleCurso implements OnInit {
   private fb = inject(FormBuilder);
   private estudiantes = inject(Estudiantes);
   private notasService = inject(Notas);
+  private authService = inject(AuthService);
 
   //Datos
   estudiante: Estudiante | null = null;
@@ -168,7 +170,7 @@ export class DetalleCurso implements OnInit {
         // Crear
         datosNota.estudianteId = this.estudiante.id;
         datosNota.estudianteNombre = this.estudiante.nombre;
-        datosNota.usuarioId = 'temp-user-id'; // Semana 4: ID real
+        datosNota.usuarioId = this.authService.getUserId() || '';  // Asociar nota al usuario actual
         
         await this.notasService.addNota(datosNota);
       }
