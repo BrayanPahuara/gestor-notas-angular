@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Validators, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Estudiantes } from '../../services/estudiantes';
 import { Estudiante, GRADOS } from '../../interfaces/estudiante';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-gestion-academica',
@@ -16,6 +17,7 @@ export class GestionAcademica implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private estudiantes = inject(Estudiantes);
+  private authService = inject(AuthService);
 
   estudianteForm! : FormGroup;
 
@@ -65,7 +67,7 @@ export class GestionAcademica implements OnInit {
   // Guardar estudiante (crear o actualizar)
   async onSubmit(): Promise<void> {
     if (this.estudianteForm.invalid) {
-      this.estudianteForm.markAllAsTouched(); // Marca los errores en rojo
+      this.estudianteForm.markAllAsTouched();
       return;
     }
 
@@ -81,7 +83,7 @@ export class GestionAcademica implements OnInit {
         // MODO CREACIÓN
         const nuevoEstudiante: Estudiante = {
           ...formData,
-          usuarioId: 'temp-user-id', // (Semana 4: pondremos el ID real)
+          usuarioId: this.authService.getUserId() || '', // Id real
           fechaCreacion: new Date(),
           activo: true
         };
