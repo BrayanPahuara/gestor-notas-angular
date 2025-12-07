@@ -1,7 +1,9 @@
 <div class="app-layout">
-  <app-navbar></app-navbar>
+  @if (mostrarNavbar) {
+    <app-navbar></app-navbar>
+  }
   
-  <main class="main-content">
+  <main class="main-content" [class.sin-navbar]="!mostrarNavbar">
     <router-outlet></router-outlet>
   </main>
 </div>
