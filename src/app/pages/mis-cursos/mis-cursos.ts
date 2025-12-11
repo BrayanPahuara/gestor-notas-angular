@@ -8,6 +8,7 @@ import { Estudiante } from '../../interfaces/estudiante';
 import { map } from 'rxjs/operators';
 import { Firestore } from '@angular/fire/firestore';
 import { collection, query, where, getDoc, deleteDoc, getDocs } from 'firebase/firestore';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-mis-cursos',
@@ -18,6 +19,8 @@ import { collection, query, where, getDoc, deleteDoc, getDocs } from 'firebase/f
 })
 export class MisCursos implements OnInit {
   private estudiantes = inject(Estudiantes);
+  private authService = inject(AuthService);
+
   estudiantes$!: Observable<Estudiante[]>;
   estudiantesFiltrados$!: Observable<Estudiante[]>;
   terminoBusqueda = '';
@@ -29,7 +32,9 @@ export class MisCursos implements OnInit {
     this.cargarEstudiantes();
   }
   private cargarEstudiantes(): void {
-    this.estudiantes$ = this.estudiantes.getEstudiantes();
+    const usuarioId = this.authService.getUserId();  // ← Obtener ID
+    if (!usuarioId) return;
+    this.estudiantes$ = this.estudiantes.getEstudiantes(usuarioId);  // ← Pasar ID
     this.estudiantesFiltrados$ = this.estudiantes$;
     this.estudiantes$.subscribe(() => {
       this.isLoading = false;

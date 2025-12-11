@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, addDoc, doc, docData, query, updateDoc, deleteDoc } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, addDoc, doc, docData, query, updateDoc, deleteDoc, where } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Estudiante } from '../interfaces/estudiante';
 import { orderBy } from 'firebase/firestore';
@@ -18,10 +18,14 @@ export class Estudiantes {
   }
 
   // READ - obtener a todos los estudiantes ordenados por fechas
-  getEstudiantes(): Observable<Estudiante[]> {
+  getEstudiantes(usuarioId: string): Observable<Estudiante[]> {
     const estudiantesRef = collection(this.firestore, this.collectionName);
-    const q = query(estudiantesRef, orderBy('fechaCreacion', 'desc'));
-    return collectionData(q, { idField: 'id' }) as Observable<Estudiante[]>;
+    const q = query(
+    estudiantesRef,
+    where('usuarioId', '==', usuarioId), // filtrar por usuarioId
+    orderBy('fechaCreacion', 'desc')
+    );
+    return collectionData(q, {idField: 'id'}) as Observable<Estudiante[]>;
   }
 
   // READ - obtener un estudiante por id para editar

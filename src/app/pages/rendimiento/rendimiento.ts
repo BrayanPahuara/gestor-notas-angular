@@ -1,23 +1,24 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { Estudiantes } from '../../services/estudiantes';
 import { Notas } from '../../services/notas';
 import { Estudiante } from '../../interfaces/estudiante';
 import { Nota, MATERIAS, PERIODOS } from '../../interfaces/nota';
 import { EstadoNotaPipe } from '../../pipes/estado-nota-pipe';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-rendimiento',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, EstadoNotaPipe],
+  imports: [CommonModule, FormsModule, EstadoNotaPipe],
   templateUrl: './rendimiento.html',
   styleUrl: './rendimiento.scss',
 })
 export class Rendimiento implements OnInit {
   private estudiantesService = inject(Estudiantes);
   private notasService = inject(Notas);
+  private authService = inject(AuthService);
 
   // Datos
   estudiantes: Estudiante[] = [];
@@ -52,15 +53,17 @@ export class Rendimiento implements OnInit {
     this.cargarDatos();
   }
   private cargarDatos(): void {
+    const usuarioId = this.authService.getUserId();
+    if (!usuarioId) return;
     // Cargar estudiantes
-    this.estudiantesService.getEstudiantes().subscribe(estudiantes => {
+    this.estudiantesService.getEstudiantes(usuarioId).subscribe(estudiantes => {
       this.estudiantes = estudiantes;
       this.stats.totalEstudiantes = estudiantes.length;
       this.calcularEstadisticas();
     });
 
     // Cargar notas
-    this.notasService.getNotas().subscribe(notas => {
+    this.notasService.getNotas(usuarioId).subscribe(notas => {
       this.notas = notas;
       this.notasFiltradas = notas;
       this.stats.totalNotas = notas.length;

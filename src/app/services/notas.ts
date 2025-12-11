@@ -18,10 +18,14 @@ export class Notas {
   }
 
   //READ - obtener todas las notas
-  getNotas(): Observable<Nota[]>{
+  getNotas(usuarioId: string): Observable<Nota[]>{
     const notasRef = collection(this.firestore, this.collectionName);
-    const q = query(notasRef, orderBy('fechaCreacion', 'desc'));
-    return collectionData(q,{idField: 'id'}) as Observable<Nota[]>;
+    const q = query(
+    notasRef,
+    where('usuarioId', '==', usuarioId), // filtrar por usuarioId
+    orderBy('fechaCreacion', 'desc')
+    );
+    return collectionData(q,{idField:'id'}) as Observable<Nota[]>;
   }
 
   //READ - obtener notas de un estudiante especifico
