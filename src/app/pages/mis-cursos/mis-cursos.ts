@@ -32,12 +32,22 @@ export class MisCursos implements OnInit {
     this.cargarEstudiantes();
   }
   private cargarEstudiantes(): void {
-    const usuarioId = this.authService.getUserId();  // ← Obtener ID
-    if (!usuarioId) return;
-    this.estudiantes$ = this.estudiantes.getEstudiantes(usuarioId);  // ← Pasar ID
-    this.estudiantesFiltrados$ = this.estudiantes$;
-    this.estudiantes$.subscribe(() => {
-      this.isLoading = false;
+    this.authService.estadoAuth$.subscribe(user => {
+      if (user) {
+        const uid = user.uid;
+        this.estudiantes$ = this.estudiantes.getEstudiantes(uid);
+        this.estudiantesFiltrados$ = this.estudiantes$;
+        this.estudiantes$.subscribe({
+          next: (data) => {
+            this.isLoading = false;
+          },
+          error: () => {
+            this.isLoading = false;
+          }
+        });
+      } else {
+        this.isLoading = false;
+      }
     });
   }
   filtrarEstudiantes(): void {

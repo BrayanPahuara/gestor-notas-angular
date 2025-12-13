@@ -12,16 +12,19 @@ import { filter } from 'rxjs';
 })
 export class App {
   private router = inject(Router);
-  mostrarNavbar = true;
+  mostrarNavbar = false;
   protected readonly title = signal('GestorNotas');
   constructor() {
     // Escuchar cambios en la ruta para mostrar u ocultar el navbar
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
-      const url = event.url;
-      // Ocultar navbar en las rutas de login y registro
-      this.mostrarNavbar = !url.includes('/login') && !url.includes('/registro');
+      const url = event.urlAfterRedirects || event.url;
+      // Lista de rutas donde no se muestra el navbar
+      const rutasSinNavbar = ['/login', '/registro', '/no-encontrado'];
+      // Verificar si la ruta actual está en la lista
+      const esRutaLimpia = rutasSinNavbar.some(ruta => url.includes(ruta));
+      this.mostrarNavbar = !esRutaLimpia;
     });
   }
 }

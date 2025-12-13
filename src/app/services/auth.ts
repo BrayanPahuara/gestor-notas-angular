@@ -9,7 +9,7 @@ export class AuthService  {
   estadoAuth$: Observable<User | null>;
 
   constructor(
-    private auth: Auth,
+    public  auth: Auth,
     private router: Router
   ){
     this.estadoAuth$ = authState(this.auth);

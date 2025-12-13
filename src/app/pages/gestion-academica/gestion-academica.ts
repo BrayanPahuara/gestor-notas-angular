@@ -5,6 +5,8 @@ import { Validators, FormBuilder, FormGroup, ReactiveFormsModule } from '@angula
 import { Estudiantes } from '../../services/estudiantes';
 import { Estudiante, GRADOS } from '../../interfaces/estudiante';
 import { AuthService } from '../../services/auth';
+import { firstValueFrom } from 'rxjs';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-gestion-academica',
@@ -81,9 +83,15 @@ export class GestionAcademica implements OnInit {
         alert('¡Estudiante actualizado correctamente!');
       } else {
         // MODO CREACIÓN
+        const user = await firstValueFrom(this.authService.estadoAuth$.pipe(take(1)));
+        if (!user) {
+          alert('Error de sesión: No se pudo verificar tu identidad. Intenta recargar la página.');
+          this.isLoading = false;
+          return;
+        };
         const nuevoEstudiante: Estudiante = {
           ...formData,
-          usuarioId: this.authService.getUserId() || '', // Id real
+          usuarioId: user.uid,
           fechaCreacion: new Date(),
           activo: true
         };
@@ -94,7 +102,7 @@ export class GestionAcademica implements OnInit {
       this.router.navigate(['/mis-cursos']);
     } catch (error) {
       console.error(error);
-      alert('Error al guardar.');
+      alert('Error al guardar. Revisa tu conexión.');
     } finally {
       this.isLoading = false;
     }

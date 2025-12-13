@@ -7,11 +7,12 @@ import { Estudiante } from '../../interfaces/estudiante';
 import { Nota, MATERIAS, PERIODOS } from '../../interfaces/nota';
 import { EstadoNotaPipe } from '../../pipes/estado-nota-pipe';
 import { AuthService } from '../../services/auth';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-rendimiento',
   standalone: true,
-  imports: [CommonModule, FormsModule, EstadoNotaPipe],
+  imports: [CommonModule, FormsModule, EstadoNotaPipe, RouterLink],
   templateUrl: './rendimiento.html',
   styleUrl: './rendimiento.scss',
 })

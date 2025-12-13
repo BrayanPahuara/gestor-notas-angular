@@ -1,0 +1,55 @@
+.error-container {
+    height: 100vh; /* Ocupa toda la pantalla */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f3f4f6; /* El mismo gris limpio del Login */
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+}
+
+.content {
+    background: white;
+    padding: 3rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 
+                0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    max-width: 400px;
+    width: 90%;
+    border: 1px solid #e5e7eb;
+
+    h1 {
+        font-size: 5rem;
+        font-weight: 800;
+        color: #4F46E5; /* Azul índigo */
+        margin: 0;
+        line-height: 1;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        color: #111827;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    p {
+        color: #6b7280;
+        margin-bottom: 2rem;
+    }
+}
+
+.btn-primary {
+    display: inline-block;
+    background-color: #111827; /* Botón negro sólido */
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: black;
+    }
+}
